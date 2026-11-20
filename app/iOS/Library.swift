@@ -32,7 +32,7 @@ final class Library: ObservableObject {
         didSet { UserDefaults.standard.set(apiKey, forKey: "apiKey") }
     }
     /// "Download everything" (default) vs pick recordings one by one.
-    @Published var autoDownload: Bool = UserDefaults.standard.object(forKey: "autoDownload") as? Bool ?? true {
+    @Published var autoDownload: Bool = UserDefaults.standard.object(forKey: "autoDownload") as? Bool ?? false {
         didSet { UserDefaults.standard.set(autoDownload, forKey: "autoDownload") }
     }
 
@@ -56,6 +56,11 @@ final class Library: ObservableObject {
         if catalog == nil { catalog = Self.previewCatalog() }
         if let d = try? Data(contentsOf: durationsURL), let m = try? JSONDecoder().decode([String: Double].self, from: d) { durations = m }
         rebuildStates()
+        // v1.1: auto-download is off by default. Stop the downloads v1.0 started on its own.
+        if !UserDefaults.standard.bool(forKey: "autoOffMigrated") {
+            UserDefaults.standard.set(true, forKey: "autoOffMigrated")
+            Downloader.shared.cancelAll()
+        }
     }
 
     /// Until Google Drive is set up, show the session list from the class-recordings site
