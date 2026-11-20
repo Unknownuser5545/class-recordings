@@ -60,7 +60,7 @@ final class Library: ObservableObject {
 
     /// Until Google Drive is set up, show the session list from the class-recordings site
     /// so the layout can be seen. These can't be downloaded.
-    var isPreview: Bool { !isSetUp }
+    var isPreview: Bool { catalog?.subjects.first?.sessions.first?.id.hasPrefix("preview-") ?? true }
 
     private static func previewCatalog() -> Catalog? {
         struct Site: Decodable {
