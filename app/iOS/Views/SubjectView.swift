@@ -26,7 +26,8 @@ struct SubjectView: View {
                                 }
                             }
                         }
-                        .buttonStyle(PillButtonStyle())
+                        .buttonStyle(.glass)
+                        .tint(Theme.accent)
                         .padding(.top, 16)
 
                         LazyVStack(spacing: 10) {
@@ -41,7 +42,7 @@ struct SubjectView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .background(Theme.bg.ignoresSafeArea())
+            .background(GlassBackground())
             .navigationBarTitleDisplayMode(.inline)
         } else {
             Text("Not found").foregroundStyle(Theme.muted)
@@ -144,9 +145,10 @@ struct DownloadButton: View {
                     Image(systemName: "checkmark.circle.fill").foregroundStyle(Theme.accent)
                 }
             }
-            .font(.system(size: 22))
-            .frame(width: 36, height: 44)
-            .contentShape(Rectangle())
+            .font(.system(size: 20))
+            .frame(width: 42, height: 42)
+            .glassEffect(.regular.interactive(), in: Circle())
+            .contentShape(Circle())
         }
         .buttonStyle(.plain)
         .disabled(state == .done)

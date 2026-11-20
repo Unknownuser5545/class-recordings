@@ -18,14 +18,6 @@ struct ZainabRecordingsApp: App {
 
     init() {
         Downloader.shared.wake()
-        let nav = UINavigationBarAppearance()
-        nav.configureWithOpaqueBackground()
-        nav.backgroundColor = UIColor(Theme.bg)
-        nav.shadowColor = .clear
-        nav.titleTextAttributes = [.foregroundColor: UIColor(Theme.text)]
-        nav.largeTitleTextAttributes = [.foregroundColor: UIColor(Theme.text)]
-        UINavigationBar.appearance().standardAppearance = nav
-        UINavigationBar.appearance().scrollEdgeAppearance = nav
     }
 
     var body: some Scene {

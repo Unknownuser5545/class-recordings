@@ -26,9 +26,9 @@ struct PlayerBar: View {
                 } label: {
                     Text(speedLabel(player.speed))
                         .font(.system(size: 13, weight: .semibold).monospacedDigit())
-                        .foregroundStyle(player.speed == 1 ? Theme.muted : Theme.accent)
-                        .padding(.horizontal, 10).frame(minHeight: 30)
-                        .overlay(Capsule().stroke(Theme.border, lineWidth: 1))
+                        .foregroundStyle(player.speed == 1 ? Theme.text : Theme.accent)
+                        .padding(.horizontal, 12).frame(minHeight: 32)
+                        .glassEffect(.regular.interactive(), in: Capsule())
                 }
                 .accessibilityLabel("Playback speed")
             }
@@ -58,13 +58,13 @@ struct PlayerBar: View {
                 Spacer()
                 Button { player.toggle() } label: {
                     Image(systemName: player.isPlaying ? "pause.fill" : "play.fill")
-                        .font(.system(size: 30))
-                        .foregroundStyle(Color(hex: 0x04120B))
-                        .frame(width: 68, height: 68)
-                        .background(Theme.accent, in: Circle())
-                        .shadow(color: Theme.accent.opacity(0.4), radius: 11, y: 6)
+                        .font(.system(size: 28))
+                        .contentTransition(.symbolEffect(.replace))
+                        .frame(width: 52, height: 52)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.glassProminent)
+                .buttonBorderShape(.circle)
+                .tint(Theme.accent)
                 .accessibilityLabel(player.isPlaying ? "Pause" : "Play")
                 Spacer()
                 ctl("goforward.10", "Forward 10 seconds", size: 28) { player.skip(player.step) }
@@ -74,11 +74,9 @@ struct PlayerBar: View {
             }
             .padding(.top, 2)
         }
-        .padding(.horizontal, 16).padding(.top, 12).padding(.bottom, 8)
-        .frame(maxWidth: .infinity)
-        .background(Theme.panel.ignoresSafeArea(edges: .bottom))
-        .overlay(alignment: .top) { Rectangle().fill(Theme.border).frame(height: 1) }
-        .shadow(color: .black.opacity(0.5), radius: 20, y: -10)
+        .padding(.horizontal, 18).padding(.top, 14).padding(.bottom, 10)
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .padding(.horizontal, 10).padding(.bottom, 4)
     }
 
     private var title: String {

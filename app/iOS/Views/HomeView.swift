@@ -35,7 +35,7 @@ struct HomeView: View {
             .padding(.bottom, 32)
             .frame(maxWidth: .infinity)
         }
-        .background(Theme.bg.ignoresSafeArea())
+        .background(GlassBackground())
         .refreshable { await lib.refresh() }
         .navigationDestination(for: String.self) { SubjectView(subjectID: $0) }
         .toolbar {
@@ -70,6 +70,7 @@ private struct SubjectCard: View {
 /// "Download all" box at the top of the home screen.
 struct DownloadPanel: View {
     @EnvironmentObject var lib: Library
+    @Namespace private var glass
 
     var body: some View {
         let done = lib.downloadedCount, total = lib.totalCount, active = lib.activeCount
@@ -85,20 +86,26 @@ struct DownloadPanel: View {
                 Spacer()
                 if lib.refreshing { ProgressView().tint(Theme.muted) }
             }
-            if active > 0 {
-                ProgressView(value: lib.activeProgress).tint(Theme.accent)
-                Button("Stop downloads") { lib.stopAll() }.buttonStyle(PillButtonStyle(color: Theme.muted))
-            } else if done < total {
-                Button {
-                    lib.downloadAll()
-                } label: {
-                    Label("Download all", systemImage: "arrow.down.circle.fill")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(Color(hex: 0x04120B))
-                        .frame(maxWidth: .infinity, minHeight: 48)
-                        .background(Theme.accent, in: Capsule())
+            GlassEffectContainer(spacing: 12) {
+                if active > 0 {
+                    VStack(spacing: 12) {
+                        ProgressView(value: lib.activeProgress).tint(Theme.accent)
+                        Button { withAnimation(.bouncy) { lib.stopAll() } } label: {
+                            Label("Stop downloads", systemImage: "stop.fill").frame(maxWidth: .infinity, minHeight: 36)
+                        }
+                        .buttonStyle(.glass)
+                        .glassEffectID("action", in: glass)
+                    }
+                } else if done < total {
+                    Button { withAnimation(.bouncy) { lib.downloadAll() } } label: {
+                        Label("Download all", systemImage: "arrow.down.circle.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                            .frame(maxWidth: .infinity, minHeight: 36)
+                    }
+                    .buttonStyle(.glassProminent)
+                    .tint(Theme.accent)
+                    .glassEffectID("action", in: glass)
                 }
-                .buttonStyle(.plain)
             }
         }
         .card()

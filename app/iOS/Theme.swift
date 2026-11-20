@@ -19,16 +19,15 @@ extension Color {
     }
 }
 
-/// The rounded dark card used for every row.
+/// Liquid Glass card used for every row. Tinted green when it's the one playing.
 struct CardStyle: ViewModifier {
     var highlighted = false
     func body(content: Content) -> some View {
         content
             .padding(.horizontal, 18).padding(.vertical, 14)
             .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
-            .background(highlighted ? Theme.accent.opacity(0.08) : Theme.panel)
-            .overlay(RoundedRectangle(cornerRadius: 14).stroke(highlighted ? Theme.accent : Theme.border, lineWidth: 1))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .glassEffect(highlighted ? .regular.tint(Theme.accent.opacity(0.22)).interactive() : .regular.interactive(),
+                         in: RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
 }
 
@@ -36,16 +35,23 @@ extension View {
     func card(highlighted: Bool = false) -> some View { modifier(CardStyle(highlighted: highlighted)) }
 }
 
-/// Pill button with a thin border (like "Jump to latest").
-struct PillButtonStyle: ButtonStyle {
-    var color: Color = Theme.accent
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.system(size: 15, weight: .medium))
-            .foregroundStyle(color)
-            .padding(.horizontal, 20).frame(minHeight: 44)
-            .overlay(Capsule().stroke(configuration.isPressed ? Theme.accent : Theme.border, lineWidth: 1))
-            .contentShape(Capsule())
+/// Dark background with soft green glows, so the glass has something to refract.
+struct GlassBackground: View {
+    var body: some View {
+        ZStack {
+            Theme.bg
+            MeshGradient(width: 3, height: 3, points: [
+                [0, 0], [0.5, 0], [1, 0],
+                [0, 0.5], [0.6, 0.45], [1, 0.5],
+                [0, 1], [0.5, 1], [1, 1],
+            ], colors: [
+                Color(hex: 0x0A2A1D), Theme.bg, Color(hex: 0x06261F),
+                Theme.bg, Color(hex: 0x0B1F18), Theme.bg,
+                Color(hex: 0x061A14), Theme.bg, Color(hex: 0x0D3324),
+            ])
+            .opacity(0.9)
+        }
+        .ignoresSafeArea()
     }
 }
 
