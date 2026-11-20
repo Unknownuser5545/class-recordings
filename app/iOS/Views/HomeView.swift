@@ -62,7 +62,8 @@ private struct SubjectCard: View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 3) {
                 Text(subject.name).font(.system(size: 17, weight: .semibold)).foregroundStyle(Theme.text)
-                Text("\(subject.sessions.count) recordings · \(onPhone) on phone")
+                Text(subject.sessions.isEmpty ? "Recordings coming soon"
+                     : "\(subject.sessions.count) recordings · \(onPhone) on phone")
                     .font(.system(size: 14)).foregroundStyle(Theme.muted)
             }
             Spacer()

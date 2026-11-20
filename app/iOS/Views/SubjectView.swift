@@ -30,6 +30,12 @@ struct SubjectView: View {
                         .tint(Theme.accent)
                         .padding(.top, 16)
 
+                        if sub.sessions.isEmpty {
+                            Text("No recordings yet. They're still uploading.\nPull down on the home screen to check again.")
+                                .font(.system(size: 15)).foregroundStyle(Theme.muted)
+                                .multilineTextAlignment(.center).padding(.top, 32)
+                        }
+
                         LazyVStack(spacing: 10) {
                             ForEach(Array(sub.sessions.enumerated()), id: \.element.id) { i, s in
                                 SessionRow(subject: sub, session: s, index: i).id(s.id)

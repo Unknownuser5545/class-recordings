@@ -49,8 +49,11 @@ struct DriveSource {
         var subjects: [Subject] = []
         for folder in top where folder.isFolder {
             let files = try await list(folder.id).filter { !$0.isFolder && Self.isAudio($0.name) }
-            guard !files.isEmpty else { continue }
             let (sid, sname) = Self.subjectInfo(folder.name)
+            // Unknown folders (like "downlaoded from brave") only show if they hold recordings.
+            guard !files.isEmpty || Self.order(sid) < 9 else { continue }
+            guard !subjects.contains(where: { $0.id == sid }) || !files.isEmpty else { continue }
+            subjects.removeAll { $0.id == sid && $0.sessions.isEmpty }
             var dated: [(date: String, item: Item)] = files.map { (Self.date(from: $0.name) ?? "", $0) }
             dated.sort { ($0.date, $0.item.name) < ($1.date, $1.item.name) }
             var seen: [String: Int] = [:]
@@ -63,6 +66,11 @@ struct DriveSource {
                                file: "\(base).\(ext)", dur: 0, bytes: pair.item.size)
             }
             subjects.append(Subject(id: sid, name: sname, sessions: sessions))
+        }
+        // Always show the three classes, even before their recordings finish uploading.
+        for (sid, sname) in [("usool", "Usool"), ("tafseer", "Tafseer"), ("nahv", "Hidayatun Nahv")]
+        where !subjects.contains(where: { $0.id == sid }) {
+            subjects.append(Subject(id: sid, name: sname, sessions: []))
         }
         subjects.sort { Self.order($0.id) < Self.order($1.id) || (Self.order($0.id) == Self.order($1.id) && $0.name < $1.name) }
         return Catalog(title: "Zainab Center Recordings", subjects: subjects, generated: Date())
