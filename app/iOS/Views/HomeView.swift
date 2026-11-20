@@ -25,6 +25,14 @@ struct HomeView: View {
                 }
                 .padding(.top, 16)
 
+                HStack(spacing: 10) {
+                    Link(destination: Links.website) { Label("Website", systemImage: "globe") }
+                    Link(destination: Links.repo) { Label("GitHub", systemImage: "chevron.left.forwardslash.chevron.right") }
+                }
+                .buttonStyle(.glass)
+                .tint(Theme.accent)
+                .padding(.top, 24)
+
                 if lib.catalog == nil {
                     Text(lib.isSetUp ? "Loading the recordings…" : "No recordings yet.")
                         .foregroundStyle(Theme.muted).padding(.top, 40)

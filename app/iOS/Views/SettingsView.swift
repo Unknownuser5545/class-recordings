@@ -40,6 +40,11 @@ struct SettingsView: View {
                     Text("The folder that holds the usool, Tafsir and Hidayatn Nahv folders, shared as \"Anyone with the link\".")
                 }
 
+                Section("Online") {
+                    Link(destination: Links.website) { Label("Class Recordings website", systemImage: "globe") }
+                    Link(destination: Links.repo) { Label("Website on GitHub", systemImage: "chevron.left.forwardslash.chevron.right") }
+                }
+
                 Section {
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
                 }

@@ -1,6 +1,11 @@
 import SwiftUI
 
 /// Colours from the class-recordings site.
+enum Links {
+    static let website = URL(string: "https://unknownuser5545.github.io/class-recordings/")!
+    static let repo = URL(string: "https://github.com/Unknownuser5545/class-recordings")!
+}
+
 enum Theme {
     static let bg = Color(hex: 0x0C0D10)
     static let panel = Color(hex: 0x15171C)
