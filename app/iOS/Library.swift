@@ -25,10 +25,16 @@ final class Library: ObservableObject {
     @Published var lastError: String?
     @Published private(set) var durations: [String: Double] = [:]
 
-    @AppStorage("folderID") var folderID: String = Library.defaultFolderID
-    @AppStorage("apiKey") var apiKey: String = Library.defaultAPIKey
+    @Published var folderID: String = UserDefaults.standard.string(forKey: "folderID") ?? Library.defaultFolderID {
+        didSet { UserDefaults.standard.set(folderID, forKey: "folderID") }
+    }
+    @Published var apiKey: String = UserDefaults.standard.string(forKey: "apiKey") ?? Library.defaultAPIKey {
+        didSet { UserDefaults.standard.set(apiKey, forKey: "apiKey") }
+    }
     /// "Download everything" (default) vs pick recordings one by one.
-    @AppStorage("autoDownload") var autoDownload: Bool = true
+    @Published var autoDownload: Bool = UserDefaults.standard.object(forKey: "autoDownload") as? Bool ?? true {
+        didSet { UserDefaults.standard.set(autoDownload, forKey: "autoDownload") }
+    }
 
     var source: DriveSource { DriveSource(folderID: folderID, apiKey: apiKey) }
     var isSetUp: Bool { !folderID.isEmpty }
