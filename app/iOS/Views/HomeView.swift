@@ -25,10 +25,7 @@ struct HomeView: View {
                 }
                 .padding(.top, 16)
 
-                HStack(spacing: 10) {
-                    Link(destination: Links.website) { Label("Website", systemImage: "globe") }
-                    Link(destination: Links.repo) { Label("GitHub", systemImage: "chevron.left.forwardslash.chevron.right") }
-                }
+                Link(destination: Links.website) { Label("Website", systemImage: "globe") }
                 .buttonStyle(.glass)
                 .tint(Theme.accent)
                 .padding(.top, 24)

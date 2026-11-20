@@ -42,7 +42,6 @@ struct SettingsView: View {
 
                 Section("Online") {
                     Link(destination: Links.website) { Label("Class Recordings website", systemImage: "globe") }
-                    Link(destination: Links.repo) { Label("Website on GitHub", systemImage: "chevron.left.forwardslash.chevron.right") }
                 }
 
                 Section {
